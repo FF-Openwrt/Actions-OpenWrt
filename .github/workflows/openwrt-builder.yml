@@ -102,8 +102,8 @@ jobs:
         run: |
           [ -e files ] && mv files openwrt/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-          cat config/general-packages.config >> $CONFIG_FILE openwrt/.config
-          cat config/extra-drivers.config >> $CONFIG_FILE openwrt/.config
+          cat config/general-packages.config >> openwrt/.config
+          cat config/extra-drivers.config >> openwrt/.config
           chmod +x $DIY_P2_SH
           cd openwrt
           $GITHUB_WORKSPACE/$DIY_P2_SH
