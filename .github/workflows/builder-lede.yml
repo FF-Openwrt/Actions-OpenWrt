@@ -87,8 +87,16 @@ jobs:
 
       - name: binutils check
         run: |
-          chmod +x install_binutils_2.41.sh
+          chmod +x binutils-check.sh
           ./binutils-check.sh
+
+      - name: Show binutils version
+        run: |
+          echo "binutils version:"
+          apt show binutils
+          ld -v
+          echo "gcc version:"
+          gcc --version
 
       # - name: Server Benchmark
       #   run: |
