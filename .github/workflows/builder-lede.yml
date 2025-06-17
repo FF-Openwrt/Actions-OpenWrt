@@ -73,9 +73,26 @@ jobs:
           python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion \
           swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
 
-      - name: Server Benchmark
+          sudo apt-get update
+          sudo apt-get install -y coreutils openssl
+          sudo apt-get install -y g++ make
+
+      - name: Show binutils version
         run: |
-          wget -qO- --no-check-certificate https://raw.githubusercontent.com/Kurokosama/serverbench/main/bench.sh | bash
+          echo "binutils version:"
+          apt show binutils
+          ld -v
+          echo "gcc version:"
+          gcc --version
+
+      - name: binutils check
+        run: |
+          chmod +x install_binutils_2.41.sh
+          ./binutils-check.sh
+
+      # - name: Server Benchmark
+      #   run: |
+      #     wget -qO- --no-check-certificate https://raw.githubusercontent.com/Kurokosama/serverbench/main/bench.sh | bash
 
       - name: Add Initialization script
         run: |
@@ -133,8 +150,8 @@ jobs:
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
-          make -j$(nproc) || make -j1 || make -j1 V=s
-          # make -j1 V=s
+          # make -j$(nproc) || make -j1 || make -j1 V=s
+          make -j1 V=s
           echo "status=success" >> $GITHUB_OUTPUT
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
